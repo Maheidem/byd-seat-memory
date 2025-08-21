@@ -6,7 +6,7 @@
 
 > **Aftermarket seat memory functionality for BYD Dolphin Plus vehicles sold in Brazil**
 
-This project recreates the seat memory functionality found in the "Electro" app through comprehensive reverse engineering and BYD Hardware Abstraction Layer (HAL) integration.
+This project creates seat memory functionality for BYD vehicles through comprehensive reverse engineering and BYD Hardware Abstraction Layer (HAL) integration.
 
 ## 🚗 Background
 
@@ -37,14 +37,14 @@ The BYD Dolphin Plus sold in Brazil lacks built-in seat memory functionality. Th
 ├── docs/                           # 📚 Comprehensive Documentation
 │   ├── BYD_HAL_COMPLETE_GUIDE.md    # Complete HAL development guide
 │   ├── BYD_HAL_QUICK_REFERENCE.md   # Quick reference for developers
-│   ├── ELECTRO_APP_ANALYSIS.md      # Electro APK reverse engineering
+│   ├── REFERENCE_APP_ANALYSIS.md    # Reference APK reverse engineering
 │   ├── PROTOCOL_ANALYSIS.md         # Communication protocol details
 │   ├── IMPLEMENTATION_POC.md        # Proof-of-concept implementation
 │   └── ...                         # Additional technical documentation
-├── decompiled_electro/             # 🔍 Electro APK Analysis Results
+├── decompiled_reference/           # 🔍 Reference APK Analysis Results
 │   ├── sources/                    # Decompiled Java source code
 │   └── resources/                  # APK resources and native libraries
-├── Electro.apk                     # 📱 Original APK for reference
+├── reference.apk                   # 📱 Original APK for reference
 ├── CLAUDE.md                       # 🤖 Development guide for AI assistants
 └── .gitignore                      # Git ignore rules
 ```
@@ -229,7 +229,7 @@ adb logcat | grep BYD_HAL
 ### Essential Reading
 - **[BYD HAL Complete Guide](docs/BYD_HAL_COMPLETE_GUIDE.md)** - Comprehensive development guide
 - **[Quick Reference](docs/BYD_HAL_QUICK_REFERENCE.md)** - Developer quick start
-- **[Electro App Analysis](docs/ELECTRO_APP_ANALYSIS.md)** - Reverse engineering findings
+- **[Reference App Analysis](docs/REFERENCE_APP_ANALYSIS.md)** - Reverse engineering findings
 - **[Installation Guide](docs/INSTALLATION_GUIDE.md)** - User installation instructions
 
 ### Technical Documentation
@@ -243,7 +243,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Rory (Electro app developer)** - Original implementation that made this analysis possible
+- **Original developers** - Reference implementation that made this analysis possible
 - **BYD Auto** - For creating the Hardware Abstraction Layer framework
 - **Brazilian BYD community** - For identifying the need for this functionality
 - **Reverse engineering community** - For tools and methodologies

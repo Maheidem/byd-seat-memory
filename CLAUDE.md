@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an Android application designed to add aftermarket seat memory functionality to the BYD Dolphin Plus (Brazilian model) infotainment system. The app is meant to be sideloaded onto the BYD's Android-based 12.8-inch rotating touchscreen and replaces the functionality of the "Electro" app that provides seat memory features.
+This is an Android application designed to add aftermarket seat memory functionality to the BYD Dolphin Plus (Brazilian model) infotainment system. The app is meant to be sideloaded onto the BYD's Android-based 12.8-inch rotating touchscreen and provides seat memory features through comprehensive reverse engineering of existing solutions.
 
 ## Target Platform
 
@@ -38,14 +38,14 @@ This is an Android application designed to add aftermarket seat memory functiona
 
 ### APK Decompilation (for analysis)
 ```bash
-# Decompile Electro.apk for reference
-jadx -d decompiled_electro Electro.apk
+# Decompile reference APK for analysis
+jadx -d decompiled_reference reference.apk
 
 # Analyze native library
-strings decompiled_electro/resources/lib/arm64-v8a/libelectropkg.so | grep seat
+strings decompiled_reference/resources/lib/arm64-v8a/libreferencepkg.so | grep seat
 
 # Extract APK resources
-apktool d Electro.apk -o electro_resources
+apktool d reference.apk -o reference_resources
 ```
 
 ### Python Backend (if using serial/CAN communication)
@@ -111,14 +111,14 @@ byd-seat-memory/
 │   │   │   └── AndroidManifest.xml
 │   │   └── test/                          # Unit tests
 │   └── build.gradle
-├── decompiled_electro/                     # Electro APK analysis results
+├── decompiled_reference/                   # Reference APK analysis results
 │   ├── sources/                           # Decompiled Java source
 │   └── resources/                         # APK resources and native libraries
 ├── docs/                                   # Comprehensive documentation
 │   ├── BYD_HAL_COMPLETE_GUIDE.md         # Complete HAL development guide
 │   ├── BYD_HAL_QUICK_REFERENCE.md        # Quick reference for developers
 │   ├── BYD_TECHNICAL_RESEARCH.md         # Technical research findings
-│   ├── ELECTRO_APP_ANALYSIS.md           # Electro APK reverse engineering
+│   ├── REFERENCE_APP_ANALYSIS.md         # Reference APK reverse engineering
 │   ├── PROTOCOL_ANALYSIS.md              # Communication protocol details
 │   ├── IMPLEMENTATION_POC.md             # Proof-of-concept implementation
 │   ├── INSTALLATION_GUIDE.md             # App installation procedures
@@ -126,7 +126,7 @@ byd-seat-memory/
 ├── gradle/                                # Gradle wrapper
 ├── build.gradle                           # Root build configuration
 ├── settings.gradle                        # Project settings
-├── Electro.apk                           # Reference APK for analysis
+├── reference.apk                         # Reference APK for analysis
 └── README.md
 
 ```
@@ -150,13 +150,13 @@ byd-seat-memory/
 2. **ADB Activation**: Submit IMEI for developer access, install via wireless ADB
 3. **Firmware Downgrade**: Last resort for newer vehicles
 
-### Critical Implementation Notes - Updated from Electro App Analysis
-- **Electro App Architecture**: Uses Socket.IO server on localhost (127.0.0.1) + native libraries
+### Critical Implementation Notes - Updated from Reference App Analysis
+- **Reference App Architecture**: Uses Socket.IO server on localhost (127.0.0.1) + native libraries
 - **Seat Positions**: Limited to 5 discrete levels (-2, -1, 0, +1, +2) called "comfort stages"
 - **Database Schema**: `seat_settings` table with driver/passenger comfort stages
 - **Communication Flow**: Android App → Socket.IO → JNI → Native Library → Vehicle Protocol
-- **Security**: Custom signature-level permission `br.com.rory.electro.PERMISSION_LOAD_SEAT_MEMORY`
-- **Key Challenge**: Vehicle communication protocol hidden in stripped native library `libelectropkg.so`
+- **Security**: Custom signature-level permission for seat memory operations
+- **Key Challenge**: Vehicle communication protocol hidden in stripped native library
 
 ### Safety Requirements
 - Implement vehicle speed check (prevent adjustment while moving)
@@ -173,7 +173,7 @@ byd-seat-memory/
 
 ## Important Notes
 
-- The original "Electro" app functionality is being reverse-engineered/recreated
+- The original reference app functionality is being reverse-engineered/recreated
 - BYD's Android system lacks Play Store, requiring APK sideloading
 - CAN bus protocol for BYD seat control needs to be documented through testing
 - App should be lightweight to run smoothly on infotainment hardware

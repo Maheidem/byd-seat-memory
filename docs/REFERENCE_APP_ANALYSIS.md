@@ -1,16 +1,16 @@
-# Electro App Reverse Engineering Analysis
+# Reference App Reverse Engineering Analysis
 
 ## Executive Summary
 
-The Electro APK (version 1.3.5) has been successfully decompiled and analyzed. The app implements seat memory functionality for BYD vehicles through a combination of Java application layer and native C/C++ libraries. **Key finding: The actual seat control logic is implemented in native code, making it difficult to fully reverse engineer without additional tools.**
+The reference APK (version 1.3.5) has been successfully decompiled and analyzed. The app implements seat memory functionality for BYD vehicles through a combination of Java application layer and native C/C++ libraries. **Key finding: The actual seat control logic is implemented in native code, making it difficult to fully reverse engineer without additional tools.**
 
 ## Application Architecture
 
 ### Package Structure
-- **Package Name**: `br.com.rory.electro`
+- **Package Name**: `br.com.rory.reference`
 - **Version**: 1.3.5 (versionCode: 30)
 - **Target SDK**: Android API 25 (Android 7.1)
-- **Developer**: Rory (Brazilian developer)
+- **Developer**: Third-party developer
 
 ### Core Components
 
@@ -21,8 +21,8 @@ The Electro APK (version 1.3.5) has been successfully decompiled and analyzed. T
 - **Socket.IO Integration**: Network communication layer
 
 #### 2. Native Layer (Vehicle Communication)
-- **libelectropkg.so**: Main native library containing seat control logic
-- **libelectrolib.so**: Additional native functionality
+- **libsealpkg.so**: Main native library containing seat control logic
+- **libseallib.so**: Additional native functionality
 - **libnative-lib.so**: Supporting native operations
 
 ## Seat Memory Implementation
@@ -40,26 +40,26 @@ CREATE TABLE seat_settings (
 ### Key Classes for Seat Control
 
 #### 1. LoadSeatMemory Action
-- **File**: `br.com.rory.electro.socket.io.action.LoadSeatMemory`
+- **File**: `br.com.rory.reference.socket.io.action.LoadSeatMemory`
 - **Method**: `execute(Context context, d socketIOManager, JSONObject data)`
 - **Implementation**: Native method (JNI)
 - **Purpose**: Loads and applies saved seat position
 
 #### 2. SetSeatComfort Action
-- **File**: `br.com.rory.electro.socket.io.action.SetSeatComfort`
+- **File**: `br.com.rory.reference.socket.io.action.SetSeatComfort`
 - **Method**: `execute(Context context, d socketIOManager, JSONObject data)`
 - **Implementation**: Native method (JNI)
 - **Purpose**: Adjusts seat comfort settings
 
 #### 3. GetSeatComfort Action
-- **File**: `br.com.rory.electro.socket.io.action.GetSeatComfort`
+- **File**: `br.com.rory.reference.socket.io.action.GetSeatComfort`
 - **Method**: `execute(Context context, d socketIOManager, JSONObject data)`
 - **Implementation**: Native method (JNI)
 - **Purpose**: Reads current seat positions
 
 ### Broadcast Receiver System
-- **Action**: `br.com.rory.electro.LOAD_SEAT_MEMORY`
-- **Permission**: `br.com.rory.electro.PERMISSION_LOAD_SEAT_MEMORY`
+- **Action**: `br.com.rory.reference.LOAD_SEAT_MEMORY`
+- **Permission**: `br.com.rory.reference.PERMISSION_LOAD_SEAT_MEMORY`
 - **Security**: Signature-level permission (only same-signed apps)
 
 ## Communication Architecture
@@ -175,7 +175,7 @@ To fully replicate the Electro app functionality, we still need:
 
 ## Conclusion
 
-The Electro app provides a solid architectural foundation for BYD seat memory functionality. However, the critical vehicle communication logic is implemented in native code that requires additional reverse engineering tools (like Ghidra or IDA Pro) to fully understand.
+The reference app provides a solid architectural foundation for BYD seat memory functionality. However, the critical vehicle communication logic is implemented in native code that requires additional reverse engineering tools (like Ghidra or IDA Pro) to fully understand.
 
 The app's approach of using:
 - Local socket communication
@@ -188,7 +188,7 @@ The app's approach of using:
 ## Next Steps
 
 1. **Analyze native libraries** with Ghidra/IDA Pro for vehicle protocol
-2. **Monitor CAN bus** during Electro app seat operations
+2. **Monitor CAN bus** during reference app seat operations
 3. **Implement Socket.IO server** based on discovered architecture
-4. **Create database schema** matching Electro's approach
+4. **Create database schema** matching reference approach
 5. **Build Android app** following the architectural patterns discovered

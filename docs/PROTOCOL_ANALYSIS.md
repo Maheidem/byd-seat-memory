@@ -3,7 +3,7 @@
 ## Major Discovery: BYD Hardware Abstraction Layer (HAL)
 
 ### BYD Auto Hardware Framework
-The Electro app reveals that BYD vehicles expose hardware functionality through Android's Hardware Abstraction Layer (HAL) with custom BYD classes:
+The reference app reveals that BYD vehicles expose hardware functionality through Android's Hardware Abstraction Layer (HAL) with custom BYD classes:
 
 ```java
 // BYD Hardware Framework Classes Found
@@ -207,12 +207,12 @@ public class SeatDatabase {
 
 1. **Test BYD HAL Access**: Create a simple app to test if BYD's hardware classes are accessible
 2. **Reverse Engineer Methods**: Use reflection to discover available methods on BYDAutoBodyworkDevice
-3. **Monitor System Calls**: Use strace/ltrace to see what system calls the Electro app makes
+3. **Monitor System Calls**: Use strace/ltrace to see what system calls the reference app makes
 4. **CAN Bus Monitoring**: If HAL access fails, fall back to direct CAN bus monitoring
 5. **Create Minimal POC**: Build a proof-of-concept using discovered architecture
 
 ## Conclusion
 
-The Electro app reveals that BYD provides a comprehensive Hardware Abstraction Layer for vehicle functions. This is the key to implementing seat memory functionality - we need to access the `BYDAutoBodyworkDevice` class rather than implementing low-level CAN bus communication.
+The reference app reveals that BYD provides a comprehensive Hardware Abstraction Layer for vehicle functions. This is the key to implementing seat memory functionality - we need to access the `BYDAutoBodyworkDevice` class rather than implementing low-level CAN bus communication.
 
 This discovery significantly simplifies the implementation approach and provides a much more reliable method for seat control than reverse engineering the CAN protocol.

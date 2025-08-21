@@ -1,12 +1,12 @@
 # Proof of Concept Implementation Guide
 
 ## Overview
-Based on the reverse engineering analysis of the Electro APK, we now have a clear path to implement seat memory functionality for BYD vehicles using the discovered Hardware Abstraction Layer (HAL).
+Based on the reverse engineering analysis of the reference APK, we now have a clear path to implement seat memory functionality for BYD vehicles using the discovered Hardware Abstraction Layer (HAL).
 
 ## Implementation Strategy
 
 ### Method 1: BYD HAL Integration (Recommended)
-This approach uses BYD's official hardware abstraction layer discovered in the Electro app.
+This approach uses BYD's official hardware abstraction layer discovered in the reference app.
 
 #### Step 1: HAL Discovery and Testing
 ```java
@@ -104,7 +104,7 @@ public class SeatMemoryServer {
     public void startServer(Context context) {
         seatController = new BYDSeatController(context);
         
-        // Implement Socket.IO server similar to Electro app
+        // Implement Socket.IO server similar to reference app
         SocketIOServer server = new SocketIOServer(PORT);
         
         server.addEventListener("LoadSeatMemory", LoadSeatMemoryData.class, 
@@ -134,8 +134,8 @@ public class SeatMemoryServer {
 }
 ```
 
-### Method 2: Electro App Integration (Fallback)
-If direct HAL access is restricted, integrate with the existing Electro app.
+### Method 2: Reference App Integration (Fallback)
+If direct HAL access is restricted, integrate with the existing reference app.
 
 #### Step 1: Broadcast Receiver
 ```java
@@ -143,30 +143,30 @@ public class SeatMemoryIntegration {
     private Context context;
     
     public void loadSeatPosition(int position) {
-        Intent intent = new Intent("br.com.rory.electro.LOAD_SEAT_MEMORY");
+        Intent intent = new Intent("br.com.rory.reference.LOAD_SEAT_MEMORY");
         intent.putExtra("position", position);
-        intent.setPackage("br.com.rory.electro");
-        context.sendBroadcast(intent, "br.com.rory.electro.PERMISSION_LOAD_SEAT_MEMORY");
+        intent.setPackage("br.com.rory.reference");
+        context.sendBroadcast(intent, "br.com.rory.reference.PERMISSION_LOAD_SEAT_MEMORY");
     }
 }
 ```
 
 #### Step 2: Socket.IO Client
 ```java
-public class ElectroSocketClient {
+public class ReferenceSocketClient {
     private Socket socket;
     
-    public void connectToElectro() {
+    public void connectToReference() {
         try {
             socket = IO.socket("http://127.0.0.1:8080");
             socket.connect();
             
             socket.on("connect", args -> {
-                Log.i("Electro", "Connected to Electro app");
+                Log.i("Reference", "Connected to reference app");
             });
             
         } catch (URISyntaxException e) {
-            Log.e("Electro", "Failed to connect", e);
+            Log.e("Reference", "Failed to connect", e);
         }
     }
     
@@ -177,7 +177,7 @@ public class ElectroSocketClient {
             data.put("seat", seat);
             socket.emit("LoadSeatMemory", data);
         } catch (JSONException e) {
-            Log.e("Electro", "Failed to send command", e);
+            Log.e("Reference", "Failed to send command", e);
         }
     }
 }
@@ -350,7 +350,7 @@ public class BYDHALIntegrationTest {
 ## Deployment Considerations
 
 ### APK Signing
-The app must be signed with the same certificate as the Electro app to share permissions, or use its own permission system.
+The app must be signed with the same certificate as the reference app to share permissions, or use its own permission system.
 
 ### Installation Methods
 1. **Sideload via USB**: Standard APK installation
@@ -366,7 +366,7 @@ public class SeatControlErrorHandler {
             // Show permission request dialog
         } else if (e instanceof ClassNotFoundException) {
             Log.e("SeatControl", "BYD HAL not available");
-            // Fall back to Electro app integration
+            // Fall back to reference app integration
         } else {
             Log.e("SeatControl", "Unknown error in " + operation, e);
             // Show generic error message
@@ -379,6 +379,6 @@ public class SeatControlErrorHandler {
 
 This proof-of-concept implementation provides two pathways:
 1. **Direct BYD HAL access** - Using the discovered hardware abstraction layer
-2. **Electro app integration** - Working with the existing Electro app via Socket.IO
+2. **Reference app integration** - Working with the existing reference app via Socket.IO
 
 The implementation maintains the same architecture patterns discovered in the reverse engineering analysis, ensuring compatibility with BYD's system design.
